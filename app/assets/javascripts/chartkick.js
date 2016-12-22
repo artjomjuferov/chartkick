@@ -446,33 +446,33 @@
             };
           }
 
-          if (chart.options.curve === false) {
-            if (chartType === "areaspline") {
-              chartType = "area";
-            } else if (chartType === "spline") {
-              chartType = "line";
-            }
-          }
-
-          var options = jsOptions(chart, chart.options, chartOptions), data, i, j;
-          options.xAxis.type = chart.discrete ? "category" : "datetime";
-          if (!options.chart.type) {
-            options.chart.type = chartType;
-          }
-          options.chart.renderTo = chart.element.id;
-
-          var series = chart.data;
-          for (i = 0; i < series.length; i++) {
-            data = series[i].data;
-            if (!chart.discrete) {
-              for (j = 0; j < data.length; j++) {
-                data[j][0] = data[j][0].getTime();
-              }
-            }
-            series[i].marker = {symbol: "circle"};
-          }
-          options.series = series;
-          chart.chart = new Highcharts.Chart(options);
+          // if (chart.options.curve === false) {
+          //   if (chartType === "areaspline") {
+          //     chartType = "area";
+          //   } else if (chartType === "spline") {
+          //     chartType = "line";
+          //   }
+          // }
+          // 
+          // var options = jsOptions(chart, chart.options, chartOptions), data, i, j;
+          // options.xAxis.type = chart.discrete ? "category" : "datetime";
+          // if (!options.chart.type) {
+          //   options.chart.type = chartType;
+          // }
+          // options.chart.renderTo = chart.element.id;
+          // 
+          // var series = chart.data;
+          // for (i = 0; i < series.length; i++) {
+          //   data = series[i].data;
+          //   if (!chart.discrete) {
+          //     for (j = 0; j < data.length; j++) {
+          //       data[j][0] = data[j][0].getTime();
+          //     }
+          //   }
+          //   series[i].marker = {symbol: "circle"};
+          // }
+          // options.series = series;
+          // chart.chart = new Highcharts.Chart(options);
         };
 
         this.renderScatterChart = function (chart) {
