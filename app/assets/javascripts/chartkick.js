@@ -445,6 +445,8 @@
               }
             };
           }
+          
+          console.log('im here');
 
           // if (chart.options.curve === false) {
           //   if (chartType === "areaspline") {
