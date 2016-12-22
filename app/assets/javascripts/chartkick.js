@@ -445,36 +445,34 @@
               }
             };
           }
-          
-          console.log('im here');
 
-          // if (chart.options.curve === false) {
-          //   if (chartType === "areaspline") {
-          //     chartType = "area";
-          //   } else if (chartType === "spline") {
-          //     chartType = "line";
-          //   }
-          // }
-          // 
-          // var options = jsOptions(chart, chart.options, chartOptions), data, i, j;
-          // options.xAxis.type = chart.discrete ? "category" : "datetime";
-          // if (!options.chart.type) {
-          //   options.chart.type = chartType;
-          // }
-          // options.chart.renderTo = chart.element.id;
-          // 
-          // var series = chart.data;
-          // for (i = 0; i < series.length; i++) {
-          //   data = series[i].data;
-          //   if (!chart.discrete) {
-          //     for (j = 0; j < data.length; j++) {
-          //       data[j][0] = data[j][0].getTime();
-          //     }
-          //   }
-          //   series[i].marker = {symbol: "circle"};
-          // }
-          // options.series = series;
-          // chart.chart = new Highcharts.Chart(options);
+          if (chart.options.curve === false) {
+            if (chartType === "areaspline") {
+              chartType = "area";
+            } else if (chartType === "spline") {
+              chartType = "line";
+            }
+          }
+
+          var options = jsOptions(chart, chart.options, chartOptions), data, i, j;
+          options.xAxis.type = chart.discrete ? "category" : "datetime";
+          if (!options.chart.type) {
+            options.chart.type = chartType;
+          }
+          options.chart.renderTo = chart.element.id;
+
+          var series = chart.data;
+          for (i = 0; i < series.length; i++) {
+            data = series[i].data;
+            if (!chart.discrete) {
+              for (j = 0; j < data.length; j++) {
+                data[j][0] = data[j][0].getTime();
+              }
+            }
+            series[i].marker = {symbol: "circle"};
+          }
+          options.series = series;
+          chart.chart = new Highcharts.Chart(options);
         };
 
         this.renderScatterChart = function (chart) {
@@ -770,6 +768,20 @@
           callback();
         };
 
+        function convertTipsToTime(library){
+          var _i, ticks = library && library.hAxis && library.hAxis.ticks;
+          if (ticks) {
+            for (var i = 0; i < ticks.length; i++) { 
+              if (ticks[i].v) {
+                ticks[i].v = toDate(ticks[i].v)
+              } else if (ticks[i]) {
+                ticks[i] = toDate(ticks[i])
+              }
+            }
+          }
+          library.hAxis.ticks = ticks;
+        };
+
         this.renderLineChart = function (chart) {
           waitForLoaded(function () {
             var chartOptions = {};
@@ -777,8 +789,13 @@
             if (chart.options.curve === false) {
               chartOptions.curveType = "none";
             }
-
+            
+            // console.log(chart.options.library);
             var options = jsOptions(chart, chart.options, chartOptions);
+            // TODO Artjom's hard coding. 
+            // Hope that we will never have to work with this code again.
+            convertTipsToTime(options)
+            
             var data = createDataTable(chart.data, chart.discrete ? "string" : "datetime");
             chart.chart = new google.visualization.LineChart(chart.element);
             resize(function () {
